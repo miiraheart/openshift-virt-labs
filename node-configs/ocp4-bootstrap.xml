@@ -1,0 +1,60 @@
+<domain type="kvm">
+  <name>ocp4-bootstrap</name>
+  <uuid>7708f2ed-f72d-400b-8fca-9a57db956d17</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://redhat.com/rhel/8.1"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <memory>8388608</memory>
+  <currentMemory>8388608</currentMemory>
+  <vcpu>4</vcpu>
+  <os>
+    <type arch="x86_64" machine="q35">hvm</type>
+    <boot dev="hd"/>
+    <boot dev="network"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <cpu mode="host-passthrough"/>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
+  <pm>
+    <suspend-to-mem enabled="no"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/var/lib/libvirt/images/ocp4-bootstrap.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
+    <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
+    <interface type="network">
+      <source network="ocp4-net"/>
+      <mac address="52:54:00:33:44:55"/>
+      <model type="virtio"/>
+    </interface>
+    <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <video>
+      <model type="qxl"/>
+    </video>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
+  </devices>
+</domain>
+

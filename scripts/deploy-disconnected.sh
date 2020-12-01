@@ -13,7 +13,9 @@ export LOCAL_REPO="ocp4/openshift4"
 
 # Build a catalogue of the images we need to pull for the specific version being deployed
 oc adm release extract --registry-config "${PULL_SECRET}" --to /tmp/images ${RELEASE_IMAGE}
-
+#subscribe Bastion
+subscription-manager register
+subscription-manager attach --auto
 # Configure a local registry pod to store the images
 yum -y install podman httpd httpd-tools
 mkdir -p /opt/registry/{auth,certs,data}
